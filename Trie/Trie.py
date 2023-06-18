@@ -9,10 +9,11 @@ class Trie(object):
 
         listaReci = re.findall(r"[\w@#']+", text)
 
-        self.lista = listaReci
+        self.lista = [rec.lower() for rec in listaReci]
 
-        for rec in listaReci:
+        for rec in self.lista:
             tmpNode = self._rootNode
+
             for slovo in rec:
                 if slovo in tmpNode:
                     tmpNode = tmpNode[slovo]
@@ -20,18 +21,28 @@ class Trie(object):
                     tmpNode[slovo] = TrieNode()
                     tmpNode = tmpNode[slovo]
 
-            tmpNode.isWord = True
-        
+            tmpNode + 1     
 
     def __contains__(self, word):
         tmpNode = self._rootNode
+
         for slovo in word:
             if slovo in tmpNode:
                 tmpNode = tmpNode[slovo]
             else:
                 return False
+            
         return tmpNode
+    
+    def occurrences(self, word):
+        tmpNode = self._rootNode
 
-    def __str__(self):
-        return str(self._rootNode)
+        for slovo in word:
+            if slovo in tmpNode:
+                tmpNode = tmpNode[slovo]
+            else:
+                return False
+              
+        return len(tmpNode)
+
                 

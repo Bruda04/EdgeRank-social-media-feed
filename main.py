@@ -3,6 +3,7 @@ from timeDecay.calcTimeDecay import calcTimeDecay
 from Trie.Trie import Trie
 import textwrap
 import os
+import re
 
 def cls():
     if os.name == 'posix':  # Unix/Linux/MacOS
@@ -22,7 +23,7 @@ def login(users):
             return unos
 
 
-def getRelevantneObjave(graph, ulogovan, statusi):
+def getRelevantneObjave(graph, ulogovan, statuses):
     relevantniStatusi = {}
 
     for relacija in graph.neighbors(ulogovan):
@@ -74,9 +75,53 @@ def edgeRankiraneObjave(graph, ulogovan, statuses):
             sumObjave[objava] = a * w * t
 
 
-    sorted_items = sorted(sumObjave.items(), key=lambda x: x[1], reverse=True)
+    sortedItems = sorted(sumObjave.items(), key=lambda x: x[1], reverse=True)
 
-    return [item[0] for item in sorted_items]
+    return [item[0] for item in sortedItems]
+
+def search(text, statuses):
+    listaReci = re.findall(r"[\w@#']+", text)
+
+    tries = {} #postId: {rec1: puta, rec2: puta ...}
+    
+    for objavljivac in statuses:
+        for status in statuses[objavljivac]:
+            tmpTrie = Trie(status, statuses[objavljivac][status]["status_message"])
+            tmpInnerDict = {}
+            for rec in listaReci:
+                tmpInnerDict[rec] = tmpTrie.occurrences(rec)
+
+            for rec in tmpInnerDict:
+                if tmpInnerDict[rec] > 0:
+                    tries[(objavljivac, status)] = tmpInnerDict
+            
+    def sorterFunc(tuple):
+        dict = tuple[1]
+        brojTrazenihReci = len(dict.values()) 
+        brojNadjenihReci = 0
+        ukupanBrojNadjenihReci = 0
+        for rec in dict:
+            if dict[rec] > 0:
+                brojNadjenihReci += 1
+                ukupanBrojNadjenihReci += dict[rec]
+
+
+        #    1       2       3
+
+        #    7       0       8  |  15   2    srednji   (2/3)^20
+
+        #    1       1       1  |   3   3    najveci   root(4, 3/3)
+
+        #    0       0       1  |   1   1    najmanji  
+        
+        return ((brojNadjenihReci/brojTrazenihReci)**20) * ukupanBrojNadjenihReci
+
+
+    sortedItems = sorted(tries.items(), key=sorterFunc, reverse=True)
+
+    return [key for (key , value) in sortedItems]
+
+
 
 if __name__ == "__main__":
     from Parsers.myParser import load_serialize_graph, load_friends, load_statuses
@@ -114,10 +159,13 @@ if __name__ == "__main__":
                 prikaziObjavu(objave[k])
             input("Pritisnite ENTER za nazad")
         elif unos == 2:
-            tries = []
-            for objavljivac in statuses:
-                for status in statuses[objavljivac]:
-                    tries.append(Trie(status, statuses[objavljivac][status]["status_message"]))
-            searchWord = input("Pretraga: ")
-            print(searchWord in tries[0])
+            searchWord = input("Pretraga: ").lower().strip()
+            
+            postovi = search(searchWord, statuses)
+
+            rezultetPretrage = search(searchWord, statuses)
+
+            for k in rezultetPretrage[:10]:
+                prikaziObjavu(statuses[k[0]][k[1]])
+            
             input("Pritisnite ENTER za nazad")
