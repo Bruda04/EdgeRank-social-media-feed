@@ -1,5 +1,3 @@
-from Parsers.myParser import load_friends, load_comments, load_shares, load_reactions, load_statuses
-
 def weightCalc(graph, ulogovan, statuses):
     consts = {
         "shares": 10,

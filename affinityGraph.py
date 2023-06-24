@@ -1,5 +1,5 @@
 if __name__ == "__main__": 
-    from Parsers.myParser import load_comments, load_friends, load_reactions, load_shares, load_statuses, save_serialize_graph, load_serialize_graph
+    from .Parsers.myParser import load_comments, load_friends, load_reactions, load_shares, load_statuses, save_serialize_graph, load_serialize_graph
     from networkx import DiGraph
     from time import time, gmtime, strftime
     from datetime import datetime
@@ -7,10 +7,10 @@ if __name__ == "__main__":
     startg = start = time()
 
     users = load_friends("dataset/friends.csv")
-    statuses = load_statuses("dataset/test_statuses.csv")
-    shares = load_shares("dataset/test_shares.csv")
-    comments = load_comments("dataset/test_comments.csv")
-    reactions = load_reactions("dataset/test_reactions.csv")
+    statuses = load_statuses("dataset/original_statuses.csv")
+    shares = load_shares("dataset/original_shares.csv")
+    comments = load_comments("dataset/original_comments.csv")
+    reactions = load_reactions("dataset/original_reactions.csv")
 
     stop = time()
 
@@ -40,7 +40,6 @@ if __name__ == "__main__":
             if posmatraniKorisnik == drugiKorisnik:
                 continue
 
-
             drugiImaStatus = drugiKorisnik in statuses
             if drugiImaStatus:
                 statusiDrugogKorisnika = statuses[drugiKorisnik]
@@ -49,13 +48,13 @@ if __name__ == "__main__":
 
             if drugiKorisnik in users[posmatraniKorisnik]["friends"]:
                 affinity *= consts["isFriend"]
-
+            
             posmatraniImaReactions = posmatraniKorisnik in reactions
             if posmatraniImaReactions and drugiImaStatus:
                 for reaction in reactions[posmatraniKorisnik].keys():
                     if reaction in statusiDrugogKorisnika:
                         tmpReaction = reactions[posmatraniKorisnik][reaction]
-
+                        
                         tmpAffinity = 1
                         if tmpReaction["type_of_reaction"] == "loves":
                             tmpAffinity = consts["loves"]

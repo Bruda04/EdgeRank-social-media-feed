@@ -23,5 +23,14 @@ class TrieNode(object):
     
     def __add__(self, value):
         self._count += value
+
+    def __iter__(self):
+        return iter(self._children)
+
+    def __next__(self):
+        raise StopIteration
+    
+    def __str__(self):
+        return f"Deca: {self._children.keys()}\nCount: {self._count}"
     
     

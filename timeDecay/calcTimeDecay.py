@@ -1,9 +1,7 @@
-from Parsers.myParser import load_friends, load_comments, load_shares, load_reactions, load_statuses
 from datetime import datetime
 
 
 def calcTimeDecay(graph, ulogovan, statuses):
-    statuses = load_statuses("dataset/test_statuses.csv")
 
     consts = {
         "timeDecay": 0.9
