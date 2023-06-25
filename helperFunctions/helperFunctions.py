@@ -127,7 +127,7 @@ def search(text, tries, ranks):
 
         #    0       0       1  |   1   1    najmanji  
 
-        rank = 0.01
+        rank = 0.0001
         if tuple[0][1] in ranks:
             rank = ranks[tuple[0][1]]*0.5
         
@@ -137,3 +137,22 @@ def search(text, tries, ranks):
     sortedItems = sorted(nadjeno.items(), key=sorterFunc, reverse=True)
 
     return [key for (key , value) in sortedItems]
+
+
+def prosiriStatuse(statuses, testStatuses): 
+    ret = statuses
+
+    for autor in testStatuses:
+        if autor in ret:
+            for postId in testStatuses[autor]:
+                if postId not in ret[autor]:
+                    ret[autor][postId] = testStatuses[autor][postId]
+        else:
+            ret[autor] = testStatuses[autor]
+
+    return ret
+
+
+
+if __name__ == "__main__":
+    pass

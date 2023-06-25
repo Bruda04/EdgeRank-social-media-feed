@@ -33,4 +33,8 @@ class TrieNode(object):
     def __str__(self):
         return f"Deca: {self._children.keys()}\nCount: {self._count}"
     
+
+if __name__ == "__main__":
+    pass
+    
     

@@ -1,19 +1,25 @@
 if __name__ == "__main__":
-    from Parsers.myParser import load_serialize_graph, load_friends, load_statuses
+    from Parsers.myParser import load_serialize_graph, load_friends, load_statuses, load_serialize_tries, save_serialize_tries
     from helperFunctions.helperFunctions import *
+    
 
     users = load_friends("dataset/friends.csv")
     ulogovan = login(users)
 
     print("Loading...")
     statuses = load_statuses("./dataset/original_statuses.csv")
+    tries = load_serialize_tries()
     graph = load_serialize_graph()
+
+    # testStatuses = load_statuses("./testProsireno/test_statuses.csv") # Linije za prosirenje Grapha
+    # statuses = prosiriStatuse(statuses, testStatuses)
+    # tries = makeTries(statuses)
+
     tezineObjava = weightCalc(graph, ulogovan, statuses)
     vremeskaKomponentaObjava = calcTimeDecay(graph, ulogovan, statuses)
     objave = getRelevantneObjave(graph, ulogovan,statuses)
     rankiraneObjave = edgeRank(graph, ulogovan, statuses, tezineObjava, vremeskaKomponentaObjava)
     rankedKeys = edgeRankiraneObjave(rankiraneObjave)
-    tries = makeTries(statuses)
 
     close = False
     while not close:

@@ -4,7 +4,7 @@ from datetime import datetime
 def calcTimeDecay(graph, ulogovan, statuses):
 
     consts = {
-        "timeDecay": 0.9
+        "timeDecay": 0.7
     }
 
     objaveDecay = {}
@@ -17,13 +17,11 @@ def calcTimeDecay(graph, ulogovan, statuses):
 
             tDelta = (datetime.now() - datetime.strptime(tmpObjava["status_published"], "%Y-%m-%d %H:%M:%S")).days
 
-            t = consts["timeDecay"]**tDelta
+            t = consts["timeDecay"]**(2*tDelta)
 
             objaveDecay[objava] = t
 
     return objaveDecay
-
-
 
         
 

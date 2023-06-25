@@ -1,8 +1,8 @@
 def weightCalc(graph, ulogovan, statuses):
     consts = {
-        "shares": 10,
-        "comments": 5,
-        "likes": 1,
+        "shares": 1.7,
+        "comments": 1.5,
+        "likes": 1.1,
     }    
 
     objaveWeight = {}

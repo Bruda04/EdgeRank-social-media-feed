@@ -1,5 +1,5 @@
 if __name__ == "__main__": 
-    from .Parsers.myParser import load_comments, load_friends, load_reactions, load_shares, load_statuses, save_serialize_graph, load_serialize_graph
+    from Parsers.myParser import load_comments, load_friends, load_reactions, load_shares, load_statuses, save_serialize_graph, load_serialize_graph
     from networkx import DiGraph
     from time import time, gmtime, strftime
     from datetime import datetime
@@ -18,12 +18,12 @@ if __name__ == "__main__":
 
     consts = {
         "isFriend": 100,
-        "shares": 8,
-        "comments": 7,
-        "loves": 7,
-        "wows": 6,
-        "hahas": 2,
-        "likes": 1,
+        "shares": 1.7,
+        "comments": 1.5,
+        "loves": 1.5,
+        "wows": 1.4,
+        "hahas": 1.3,
+        "likes": 1.1,
         "sads": 0.95,
         "angrys": 0.8,
         "timeDecay": 0.94
@@ -39,6 +39,8 @@ if __name__ == "__main__":
         for drugiKorisnik in users.keys():
             if posmatraniKorisnik == drugiKorisnik:
                 continue
+            
+            imaAfinitet = False
 
             drugiImaStatus = drugiKorisnik in statuses
             if drugiImaStatus:
@@ -48,6 +50,7 @@ if __name__ == "__main__":
 
             if drugiKorisnik in users[posmatraniKorisnik]["friends"]:
                 affinity *= consts["isFriend"]
+                imaAfinitet = True
             
             posmatraniImaReactions = posmatraniKorisnik in reactions
             if posmatraniImaReactions and drugiImaStatus:
@@ -73,6 +76,8 @@ if __name__ == "__main__":
 
 
                         affinity *= tmpAffinity * (consts["timeDecay"]**tDelta)
+                        imaAfinitet = True
+
 
             posmatraniImaShares = posmatraniKorisnik in shares
             if posmatraniImaShares and drugiImaStatus:
@@ -80,6 +85,8 @@ if __name__ == "__main__":
                     if share in statusiDrugogKorisnika:
                         tDelta = (datetime.now() - datetime.strptime(shares[posmatraniKorisnik][share]["status_shared"], "%Y-%m-%d %H:%M:%S")).days // 10
                         affinity *= consts["shares"] * (consts["timeDecay"]**tDelta)
+                        imaAfinitet = True
+
 
             posmatrainiImaComments = posmatraniKorisnik in comments
             if posmatrainiImaComments and drugiImaStatus:
@@ -87,8 +94,10 @@ if __name__ == "__main__":
                     if comment in statusiDrugogKorisnika:
                         tDelta = (datetime.now() - datetime.strptime(comments[posmatraniKorisnik][comment]["comment_published"], "%Y-%m-%d %H:%M:%S")).days // 10
                         affinity *= consts["comments"] * (consts["timeDecay"]**tDelta)
+                        imaAfinitet = True
 
-            if affinity != 1:
+
+            if imaAfinitet:
                 graph.add_edge(posmatraniKorisnik, drugiKorisnik, weight=affinity)
 
         print(str(i) + "/" + lu)

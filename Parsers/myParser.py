@@ -200,11 +200,20 @@ def get_friends_header():
 
 
 def save_serialize_graph(data):
-    with open("save.pickle", "wb") as pickleFile:
+    with open("graph.pickle", "wb") as pickleFile:
         pickle.dump(data, pickleFile)
 
 def load_serialize_graph() -> DiGraph:
-    with open("save.pickle", "rb") as pickleFile:
+    with open("graph.pickle", "rb") as pickleFile:
+        data = pickle.load(pickleFile)
+        return data
+    
+def save_serialize_tries(data):
+    with open("tries.pickle", "wb") as pickleFile:
+        pickle.dump(data, pickleFile)
+
+def load_serialize_tries():
+    with open("tries.pickle", "rb") as pickleFile:
         data = pickle.load(pickleFile)
         return data
 

@@ -93,3 +93,5 @@ class Trie(object):
     def objavljivac(self):
         return self._objavljivac
                 
+if __name__ == "__main__":
+    pass
