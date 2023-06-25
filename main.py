@@ -10,7 +10,7 @@ if __name__ == "__main__":
     statuses = load_statuses("./dataset/original_statuses.csv")
     tries = load_serialize_tries()
     graph = load_serialize_graph()
-
+    
     # testStatuses = load_statuses("./testProsireno/test_statuses.csv") # Linije za prosirenje Grapha
     # statuses = prosiriStatuse(statuses, testStatuses)
     # tries = makeTries(statuses)
@@ -30,7 +30,10 @@ if __name__ == "__main__":
 
         validanUnos = False
         while not validanUnos:
-            unos = int(input("Odaberite opciju: "))
+            unos = input("Odaberite opciju: ")
+            if not unos.isnumeric():
+                continue
+            unos = int(unos)
             if unos == 3:
                 validanUnos = True
                 close = True
